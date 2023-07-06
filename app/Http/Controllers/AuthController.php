@@ -11,6 +11,7 @@
     use Illuminate\Validation\ValidationException;
     use Illuminate\Http\JsonResponse;
     use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Log;
 
     class AuthController extends BaseController
     {
@@ -52,7 +53,7 @@
         }
 
 
-        public function login (Request $request): JsonResponse
+        public function login(Request $request): JsonResponse
         {
             try {
                 $validatedData = $request->validate([
@@ -70,15 +71,22 @@
                     return response()->json(['error' => 'Invalid credentials.'], 401);
                 }
 
-                return response()->json(['message' => 'Login successful'], 200);
+                $is_admin = $user->hasRole('admin');
+                $token = $user->createToken('auth-token')->plainTextToken;
+
+                return response()->json(['token' => $token, 'user' => $user, 'is_admin' => $is_admin], 200);
 
             } catch (ValidationException $e) {
                 $errors = $e->validator->errors()->all();
                 return response()->json(['errors' => $errors], 422);
             } catch (\Exception $e) {
-                return response()->json(['error' => 'An error occurred while logging in. Please try again.'], 500);
+                $errorMessage = $e->getMessage(); // Get the specific error message
+                Log::error($errorMessage); // Log the error message for debugging purposes
+
+                return response()->json(['error' => $errorMessage], 500);
             }
         }
+
 
         public function logout(): JsonResponse {
             
