@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Controllers\admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\manager\ProfileController as ManagerProfileController;
+use App\Http\Controllers\admin\UserController as AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,3 +44,5 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function(){
     Route::post('/admin/assign_roles', [AdminController::class, 'assign_roles']);
     Route::post('/admin/logout', [AuthController::class, 'logout']);
 });
+
+Route::apiResource('users', AdminUserController::class);
