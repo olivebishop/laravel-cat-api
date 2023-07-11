@@ -90,13 +90,11 @@
         public function logout(): JsonResponse
         {
             try {
-                $user = Auth::guard('web')->user();
+                $user = Auth::user();
                 if ($user) {
                     $user->tokens()->delete();
+                    return response()->json(['message' => 'You have logged out.'], 200);
                 }
-
-                Auth::guard('web')->logout();
-                return response()->json(['message' => 'You have logged out.'], 200);
             } catch (\Exception $e) {
                 $errorMessage = $e->getMessage(); // Get the specific error message
                 Log::error($errorMessage); // Log the error message for debugging purposes
