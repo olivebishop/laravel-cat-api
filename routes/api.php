@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\manager\ProfileController as ManagerProfileController;
 use App\Http\Controllers\admin\UserController as AdminUserController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,6 +29,11 @@ use App\Http\Controllers\admin\UserController as AdminUserController;
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
+Route::post('/delete-account', [AuthController::class, 'softDeleteAccount']);
+
 Route::group(['middleware' => ['auth:sanctum', EnsureFrontendRequestsAreStateful::class, 'role:user']], function () {
     Route::get('/dashboard/profile', [ProfileController::class, 'index'])->name('dashboard.profile');
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -41,7 +47,7 @@ Route::group(['middleware' => ['auth:sanctum', 'role:manager']], function(){
 
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function(){
     Route::get('/admin/dashboard/profile', [AdminProfileController::class, 'index'])->name('admin.dashboard.profile');
-    Route::post('/admin/assign_roles', [AdminController::class, 'assign_roles']);
+    Route::post('/admin/assign-roles', [AdminController::class, 'assign_roles']);
     Route::post('/admin/logout', [AuthController::class, 'logout']);
 });
 
