@@ -103,20 +103,14 @@
                     'password.required' => 'Please enter a password.',
                 ]);
 
-                $user = User::onlyTrashed()->where('email', $validatedData['email'])->first();
+                $user = User::where('email', $validatedData['email'])->first();
 
                 if (!$user) {
                     return response()->json(['error' => 'User not found.'], 404);
                 }
-
-                if ($user->trashed()) {
-                    return response()->json(['error' => 'Your account has been deleted. Please contact support for assistance.'], 401);
-                }
-
                 if (!$user->verified) {
                     return response()->json(['error' => 'Please verify your email address first.'], 401);
                 }
-
                 if (!Hash::check($validatedData['password'], $user->password)) {
                     return response()->json(['error' => 'Invalid credentials.'], 401);
                 }
@@ -136,6 +130,7 @@
                 return response()->json(['error' => $errorMessage], 500);
             }
         }
+
         public function logout(): JsonResponse
         {
             try {
