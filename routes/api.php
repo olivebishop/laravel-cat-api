@@ -32,11 +32,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
-Route::post('/delete-account', [AuthController::class, 'softDeleteAccount']);
+
 
 Route::group(['middleware' => ['auth:sanctum', EnsureFrontendRequestsAreStateful::class, 'role:user']], function () {
     Route::get('/dashboard/profile', [ProfileController::class, 'index'])->name('dashboard.profile');
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/delete-account', [AuthController::class, 'softDeleteAccount']);
 });
 
 
