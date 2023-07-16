@@ -227,18 +227,21 @@
         }
 
         public function softDeleteAccount()
-        {
-            try {
-                $user = Auth::user();
-                if ($user) {
-                    $user->delete();
-                    return response()->json(['message' => 'Your account has been deleted.'], 200);
-                }
-            } catch (\Exception $e) {
-                $errorMessage = $e->getMessage();
-                Log::error($errorMessage);
-                return response()->json(['error' => $errorMessage], 500);
-            }
+{
+    try {
+        $user = Auth::user();
+        if ($user) {
+            Auth::logout(); // Log out the authenticated user
+            $user->delete(); // Soft delete the user account
+            return response()->json(['message' => 'Your account has been deleted.'], 200);
+        } else {
+            return response()->json(['error' => 'User not found.'], 404);
         }
+    } catch (\Exception $e) {
+        $errorMessage = $e->getMessage();
+        Log::error($errorMessage);
+        return response()->json(['error' => $errorMessage], 500);
+    }
+}
 
     }

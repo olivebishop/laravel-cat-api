@@ -37,7 +37,7 @@ Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
 Route::group(['middleware' => ['auth:sanctum', EnsureFrontendRequestsAreStateful::class, 'role:user']], function () {
     Route::get('/dashboard/profile', [ProfileController::class, 'index'])->name('dashboard.profile');
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/delete-account', [AuthController::class, 'softDeleteAccount']);
+   Route::post('/login/delete-account', [AuthController::class, 'softDeleteAccount']);
 });
 
 
